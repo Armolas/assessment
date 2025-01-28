@@ -23,9 +23,10 @@ function App() {
     const contract = new ethers.Contract(contractAddress, abi, provider)
 
     try {
+      const loadingToastId = toast.loading("Retrieving balance...")
       const balance = await contract.getBalance()
       setBalance(balance.toString())
-      toast.success(`Balance Successfully Retrieved: ${balance.toString()}`)
+      toast.update(loadingToastId, { render: `Balance Successfully Retrieved: ${balance.toString()}`, type: "success", isLoading: false, autoClose: 5000 })
     } catch(err) {
       toast.error('Transaction failed')
       console.error('Transaction failed', err)
@@ -40,11 +41,12 @@ function App() {
     const signer = await provider.getSigner()
     const contract = new ethers.Contract(contractAddress, abi, signer)
     try {
+      const loadingToastId = toast.loading("Processing deposit...")
       const tx = await contract.deposit(depositInput)
       const receipt = await tx.wait()
       setDepositInput(0)
       getBalance()
-      toast.success('Deposit Successful')
+      toast.update(loadingToastId, { render: 'Deposit Successful', type: "success", isLoading: false, autoClose: 5000 })
     } catch(err) {
       toast.error('Transaction failed')
       console.error('Transaction failed', err)
@@ -59,11 +61,12 @@ function App() {
     const signer = await provider.getSigner()
     const contract = new ethers.Contract(contractAddress, abi, signer)
     try {
+      const loadingToastId = toast.loading("Processing withdrawal...")
       const tx = await contract.withdraw(withdrawInput)
       const receipt = await tx.wait()
       setWithdrawInput(0)
       getBalance()
-      toast.success('Withdraw Successful')
+      toast.update(loadingToastId, { render: 'Withdraw Successful', type: "success", isLoading: false, autoClose: 5000 })
     } catch(err) {
       toast.error('Transaction failed')
       console.error('Transaction failed', err)
